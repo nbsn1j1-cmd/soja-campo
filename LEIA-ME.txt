@@ -1,30 +1,17 @@
-SOJA CAMPO — PROTÓTIPO PWA
-============================
+SOJA CAMPO — VERSÃO COM MAPA E TALHÕES
 
-Arquivos:
-- index.html: interface e funcionalidades
-- manifest.json: configuração instalável
-- sw.js: cache para abrir offline depois da primeira visita
-- icon.svg: ícone
-
-FUNCIONALIDADES:
-- Registros de monitoramento de soja
-- DAP calculado pela data de plantio
-- GPS do ponto (requer HTTPS e permissão)
-- Fotos comprimidas e armazenadas no navegador
-- Histórico e busca
-- Alertas de triagem configuráveis
-- Exportação CSV para Excel e backup JSON
-- Previsão do tempo regional (requer internet)
-- Cache offline do app (depois de carregado uma vez)
+Novidades:
+- Cadastre cada fazenda uma única vez.
+- Desenhe os limites de cada talhão tocando nos cantos no mapa.
+- O app estima a área em hectares.
+- Fazendas e talhões ficam salvos neste navegador/aparelho.
+- Ao registrar uma vistoria, selecione a fazenda e o talhão já cadastrados.
+- Backup JSON agora inclui fazendas, talhões, limites desenhados, configurações e vistorias.
 
 IMPORTANTE:
-1. Para usar como app instalável no iPhone, publique estes arquivos em uma hospedagem HTTPS.
-2. Abra o endereço no Safari do iPhone > Compartilhar > Adicionar à Tela de Início > ative “Abrir como app da web” se aparecer.
-3. Abra o app uma vez conectado para guardar os arquivos offline.
-4. Registros ficam neste navegador/aparelho. Exporte backups regularmente. Limpar dados do Safari pode apagar registros.
-5. O GPS requer HTTPS e autorização.
-6. A previsão usa Open-Meteo para uma coordenada regional aproximada de Chapadão do Sul; não é uma estação dentro do talhão.
-7. Alertas são triagem configurável e não substituem orientação de engenheiro agrônomo ou recomendações oficiais.
-
-Este é um protótipo inicial, não é afiliado à Syngenta e não replica código proprietário do Cropwise.
+- O mapa e os mapas de fundo usam OpenStreetMap e precisam de internet para carregar.
+- A área é estimada a partir dos pontos tocados no mapa, não é levantamento topográfico certificado.
+- GPS exige permissão do Safari e publicação em HTTPS.
+- Os dados são armazenados localmente no navegador. Faça backup regularmente.
+- Este é um protótipo independente, não afiliado à Syngenta/Cropwise.
+- Os alertas são apenas indicadores de triagem e não substituem avaliação agronômica.
