@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#1c5b35">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon.svg">
+<title>Soja Campo</title>
+<style>
+:root{--green:#1c5b35;--green2:#2f7d4a;--mint:#eaf4ed;--bg:#f5f7f4;--ink:#17241b;--muted:#657168;--line:#dce5dc;--red:#b42318;--amber:#9a6700}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding-bottom:calc(76px + env(safe-area-inset-bottom))}
+header{background:linear-gradient(135deg,#17472b,#2f7d4a);color:white;padding:calc(18px + env(safe-area-inset-top)) 18px 20px;border-radius:0 0 22px 22px}
+.brand{font-size:12px;letter-spacing:1.5px;opacity:.8;font-weight:800}.headrow{display:flex;align-items:center;justify-content:space-between;gap:10px}h1{font-size:26px;margin:7px 0 4px}.sub{opacity:.85;font-size:13px}.chip{font-size:11px;border:1px solid #ffffff66;border-radius:20px;padding:6px 9px;white-space:nowrap}
+main{max-width:760px;margin:auto;padding:14px}.view{display:none}.view.active{display:block}.sectiontitle{font-size:18px;font-weight:800;margin:8px 2px 12px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.card{background:white;border:1px solid var(--line);border-radius:16px;padding:14px;box-shadow:0 2px 8px #173f2410}.metriclabel{font-size:12px;color:var(--muted)}.metric{font-size:27px;font-weight:800;margin-top:6px;color:var(--green)}.small{font-size:12px;color:var(--muted);line-height:1.45}.btn{border:0;border-radius:12px;background:var(--green);color:white;padding:12px 14px;font-weight:750;font-size:14px;cursor:pointer;min-height:44px}.btn.secondary{background:var(--mint);color:var(--green)}.btn.ghost{background:#fff;border:1px solid var(--line);color:var(--ink)}.btn.danger{background:#fff0ef;color:var(--red)}.btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.btnrow .btn{flex:1}.field{margin-bottom:12px}label{display:block;font-size:12px;font-weight:750;color:#455449;margin:0 0 6px}input,select,textarea{width:100%;border:1px solid #cfdacf;border-radius:10px;padding:12px;font:inherit;font-size:16px;background:#fff;color:var(--ink);min-height:44px}textarea{min-height:80px;resize:vertical}.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.formgrid .full{grid-column:1/-1}.notice{background:#fff7e5;border:1px solid #f1dfad;border-radius:12px;padding:11px 12px;font-size:12px;line-height:1.45;color:#674d10;margin:10px 0}.good{background:var(--mint);border:1px solid #cde2d1;color:var(--green)}.record{background:#fff;border:1px solid var(--line);border-radius:14px;padding:13px;margin-bottom:10px}.recordtop{display:flex;justify-content:space-between;gap:8px}.recordtitle{font-weight:800}.tag{font-size:11px;border-radius:30px;padding:5px 8px;background:var(--mint);color:var(--green);font-weight:800;height:max-content}.tag.alert{background:#ffe7e5;color:var(--red)}.recordmeta{font-size:12px;color:var(--muted);margin-top:5px}.record img{max-width:100%;max-height:160px;object-fit:cover;border-radius:8px;margin-top:8px}.bottomnav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);padding:7px 5px calc(7px + env(safe-area-inset-bottom));z-index:5}.navbtn{border:0;background:transparent;color:#718076;font-size:10px;font-weight:700;padding:7px 2px}.navbtn span{display:block;font-size:21px;margin-bottom:2px}.navbtn.active{color:var(--green)}.hidden{display:none!important}.weatherbig{font-size:28px;font-weight:800}.mutedlink{color:var(--green);text-decoration:underline}.divider{height:1px;background:var(--line);margin:12px 0}.footer{text-align:center;color:#89958c;font-size:10px;padding:16px}
+@media(min-width:600px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}.formgrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+</style>
+</head>
+<body>
+<header>
+  <div class="headrow"><div><div class="brand">SOJA CAMPO · MONITORAMENTO</div><h1>Minha lavoura</h1><div class="sub">Chapadão do Sul · Mato Grosso do Sul</div></div><div class="chip" id="offlineBadge">● pronto para uso</div></div>
+</header>
+<main>
+<section class="view active" id="home">
+  <div class="sectiontitle">Resumo da safra</div>
+  <div class="grid">
+    <div class="card"><div class="metriclabel">Registros de campo</div><div class="metric" id="mTotal">0</div></div>
+    <div class="card"><div class="metriclabel">Alertas registrados</div><div class="metric" id="mAlerts">0</div></div>
+    <div class="card"><div class="metriclabel">Média de lagartas/m</div><div class="metric" id="mCater">—</div></div>
+    <div class="card"><div class="metriclabel">Média de percevejos/m</div><div class="metric" id="mBugs">—</div></div>
+  </div>
+  <div class="sectiontitle" style="margin-top:20px">Acesso rápido</div>
+  <div class="card"><b>Registrar uma visita</b><div class="small" style="margin-top:5px">Conte pragas, registre estádio, desfolha, doenças, GPS e foto. Os dados ficam salvos neste aparelho.</div><div class="btnrow"><button class="btn" onclick="showView('new')">＋ Novo monitoramento</button><button class="btn secondary" onclick="showView('records')">Ver histórico</button></div></div>
+  <div class="sectiontitle" style="margin-top:20px">Clima local</div>
+  <div class="card"><div id="weatherStatus" class="small">Consulte a previsão quando houver internet.</div><div id="weatherResult" class="hidden"></div><div class="btnrow"><button class="btn secondary" onclick="loadWeather()">↻ Atualizar clima</button></div><div class="small" style="margin-top:8px">Previsão aproximada para a região de Chapadão do Sul. Não substitui estação meteorológica da fazenda.</div></div>
+  <div class="notice">Os alertas são indicadores de triagem configuráveis, não recomendação automática de aplicação. Confirme o nível de controle com o responsável técnico e as recomendações locais.</div>
+</section>
+
+<section class="view" id="new">
+  <div class="sectiontitle">Novo monitoramento</div>
+  <form id="monitorForm">
+    <div class="formgrid">
+      <div class="field"><label for="farm">Fazenda</label><input id="farm" placeholder="Nome da fazenda"></div>
+      <div class="field"><label for="talhao">Talhão</label><input id="talhao" required placeholder="Ex.: Talhão 01"></div>
+      <div class="field"><label for="point">Ponto de amostragem</label><input id="point" required placeholder="Ex.: Ponto 1"></div>
+      <div class="field"><label for="planting">Data do plantio</label><input id="planting" type="date"></div>
+      <div class="field"><label for="dap">DAP (automático)</label><input id="dap" readonly placeholder="Calculado pela data"></div>
+      <div class="field"><label for="date">Data da visita</label><input id="date" type="date" required></div>
+      <div class="field"><label for="stage">Estádio fenológico</label><select id="stage"><option value="">Selecione…</option><optgroup label="Vegetativo"><option>VE</option><option>VC</option><option>V1</option><option>V2</option><option>V3</option><option>V4</option><option>V5</option><option>V6 ou superior</option></optgroup><optgroup label="Reprodutivo"><option>R1</option><option>R2</option><option>R3</option><option>R4</option><option>R5</option><option>R6</option><option>R7</option><option>R8</option></optgroup></select></div>
+      <div class="field"><label for="plants">Plantas por metro</label><input id="plants" type="number" min="0" step="0.1" placeholder="Ex.: 12"></div>
+      <div class="field"><label for="caterpillars">Lagartas por metro</label><input id="caterpillars" type="number" min="0" step="0.1" placeholder="Ex.: 2"></div>
+      <div class="field"><label for="bugs">Percevejos por metro</label><input id="bugs" type="number" min="0" step="0.1" placeholder="Ex.: 0.5"></div>
+      <div class="field"><label for="defoliation">Desfolha média (%)</label><input id="defoliation" type="number" min="0" max="100" step="1" placeholder="0–100"></div>
+      <div class="field"><label for="disease">Doenças / severidade</label><select id="disease"><option>Não observado</option><option>Baixa</option><option>Moderada</option><option>Alta</option><option>Não identificado</option></select></div>
+      <div class="field"><label for="latitude">Latitude GPS</label><input id="latitude" readonly placeholder="Toque em obter GPS"></div>
+      <div class="field"><label for="longitude">Longitude GPS</label><input id="longitude" readonly placeholder="Toque em obter GPS"></div>
+      <div class="field"><label for="photo">Foto da lavoura/praga</label><input id="photo" type="file" accept="image/*" capture="environment"></div>
+      <div class="field full"><label for="notes">Observações</label><textarea id="notes" placeholder="Local, ocorrência, dano, ação planejada…"></textarea></div>
+    </div>
+    <div class="btnrow"><button type="button" class="btn secondary" onclick="getGPS()">⌖ Obter GPS</button><button type="submit" class="btn">Salvar monitoramento</button></div>
+    <div id="formMsg" class="small" style="margin-top:10px"></div>
+  </form>
+</section>
+
+<section class="view" id="records">
+  <div class="sectiontitle">Histórico de visitas</div>
+  <input id="searchRecords" placeholder="Buscar por fazenda, talhão ou ponto…" oninput="renderRecords()" style="margin-bottom:12px">
+  <div class="btnrow" style="margin:0 0 12px"><button class="btn secondary" onclick="exportCSV()">⇩ Exportar CSV</button><button class="btn ghost" onclick="window.print()">Imprimir / PDF</button></div>
+  <div id="recordList"></div>
+  <div class="small">Os registros são armazenados localmente neste navegador/aparelho. Exporte uma cópia regularmente para backup.</div>
+</section>
+
+<section class="view" id="settings">
+  <div class="sectiontitle">Configurações e backup</div>
+  <div class="card">
+    <b>Limites de alerta (triagem)</b>
+    <div class="small" style="margin:5px 0 12px">Valores iniciais editáveis. Não são uma prescrição agronômica universal.</div>
+    <div class="formgrid">
+      <div class="field"><label for="limCater">Lagartas/m acima de</label><input id="limCater" type="number" min="0" step="0.1" value="3"></div>
+      <div class="field"><label for="limBugs">Percevejos/m acima de</label><input id="limBugs" type="number" min="0" step="0.1" value="2"></div>
+      <div class="field"><label for="limDefV">Desfolha vegetativo (%)</label><input id="limDefV" type="number" min="0" max="100" value="30"></div>
+      <div class="field"><label for="limDefR">Desfolha reprodutivo (%)</label><input id="limDefR" type="number" min="0" max="100" value="15"></div>
+    </div>
+    <button class="btn" onclick="saveSettings()">Salvar limites</button>
+  </div>
+  <div class="card" style="margin-top:12px"><b>Backup e recuperação</b><div class="small" style="margin:6px 0 12px">Exporte os dados em CSV para abrir no Excel. As fotos ficam no armazenamento local e não vão no CSV.</div><div class="btnrow"><button class="btn secondary" onclick="exportCSV()">Exportar registros</button><button class="btn ghost" onclick="document.getElementById('importFile').click()">Importar backup JSON</button></div><input id="importFile" type="file" accept=".json,application/json" class="hidden" onchange="importJSON(event)"><div class="btnrow"><button class="btn ghost" onclick="exportJSON()">Baixar backup completo</button><button class="btn danger" onclick="clearAll()">Apagar todos os dados</button></div></div>
+  <div class="notice">Protótipo inicial para uso pessoal. Antes de usar como sistema oficial, teste em campo e mantenha cópias de segurança. GPS depende de permissão e normalmente de conexão segura (HTTPS).</div>
+  <div class="small">Clima: Open-Meteo, com atribuição exigida pela licença dos dados. A previsão pode não representar microclima dentro do talhão.</div>
+</section>
+<div class="footer">Soja Campo · protótipo independente · não afiliado à Syngenta</div>
+</main>
+<nav class="bottomnav">
+  <button class="navbtn active" data-view="home" onclick="showView('home')"><span>⌂</span>Início</button>
+  <button class="navbtn" data-view="new" onclick="showView('new')"><span>＋</span>Registrar</button>
+  <button class="navbtn" data-view="records" onclick="showView('records')"><span>▤</span>Histórico</button>
+  <button class="navbtn" data-view="settings" onclick="showView('settings')"><span>⚙</span>Config.</button>
+</nav>
+<script>
+const $=id=>document.getElementById(id);
+const DB='sojaCampoRecordsV1', SETTINGS='sojaCampoSettingsV1';
+let records=[], settings={limCater:3,limBugs:2,limDefV:30,limDefR:15}, photoData='';
+function readData(){try{records=JSON.parse(localStorage.getItem(DB)||'[]')}catch(e){records=[]}try{settings={...settings,...JSON.parse(localStorage.getItem(SETTINGS)||'{}')}}catch(e){};['limCater','limBugs','limDefV','limDefR'].forEach(k=>$(k).value=settings[k]);}
+function writeData(){try{localStorage.setItem(DB,JSON.stringify(records));localStorage.setItem(SETTINGS,JSON.stringify(settings));return true}catch(e){alert('Armazenamento cheio. Exporte o backup e remova fotos antigas.');return false}}
+function today(){return new Date().toLocaleDateString('en-CA')}
+function showView(v){document.querySelectorAll('.view').forEach(x=>x.classList.toggle('active',x.id===v));document.querySelectorAll('.navbtn').forEach(x=>x.classList.toggle('active',x.dataset.view===v));if(v==='records')renderRecords();if(v==='home')renderDashboard();window.scrollTo(0,0)}
+function dapCalc(){let p=$('planting').value;if(!p){$('dap').value='';return}let d=new Date(p+'T12:00:00');$('dap').value=Math.max(0,Math.floor((new Date(new Date().toDateString())-new Date(d.toDateString()))/86400000))}
+$('planting').addEventListener('change',dapCalc);
+$('photo').addEventListener('change',async e=>{photoData='';let f=e.target.files&&e.target.files[0];if(!f)return;try{photoData=await compressImage(f);$('formMsg').textContent='Foto preparada para salvar.'}catch(err){$('formMsg').textContent='Não foi possível preparar a foto.'}});
+function compressImage(file){return new Promise((resolve,reject)=>{let img=new Image(),url=URL.createObjectURL(file);img.onload=()=>{let scale=Math.min(1,900/Math.max(img.width,img.height)),c=document.createElement('canvas');c.width=Math.round(img.width*scale);c.height=Math.round(img.height*scale);c.getContext('2d').drawImage(img,0,0,c.width,c.height);URL.revokeObjectURL(url);resolve(c.toDataURL('image/jpeg',.62))};img.onerror=reject;img.src=url})}
+function getGPS(){if(!navigator.geolocation){alert('GPS não está disponível neste navegador.');return} $('formMsg').textContent='Buscando GPS…';navigator.geolocation.getCurrentPosition(pos=>{$('latitude').value=pos.coords.latitude.toFixed(6);$('longitude').value=pos.coords.longitude.toFixed(6);$('formMsg').textContent='GPS capturado (precisão aproximada: '+Math.round(pos.coords.accuracy)+' m).'},err=>{$('formMsg').textContent='Não foi possível obter GPS. Confira permissão e conexão segura (HTTPS).';},{enableHighAccuracy:true,timeout:15000,maximumAge:30000})}
+function getNum(id){let v=$(id).value;return v===''?null:Number(v)}
+function alertTypes(r){let a=[];let s=(r.stage||'').toUpperCase();if(r.caterpillars!==null&&r.caterpillars>settings.limCater)a.push('Lagartas');if(r.defoliation!==null&&((s.startsWith('V')&&r.defoliation>settings.limDefV)||(s.startsWith('R')&&r.defoliation>settings.limDefR)))a.push('Desfolha');if(s.startsWith('R')&&r.bugs!==null&&r.bugs>settings.limBugs)a.push('Percevejos');return a}
+$('monitorForm').addEventListener('submit',e=>{e.preventDefault();dapCalc();let r={id:Date.now(),farm:$('farm').value.trim(),talhao:$('talhao').value.trim(),point:$('point').value.trim(),planting:$('planting').value,date:$('date').value,stage:$('stage').value,plants:getNum('plants'),caterpillars:getNum('caterpillars'),bugs:getNum('bugs'),defoliation:getNum('defoliation'),disease:$('disease').value,latitude:$('latitude').value,longitude:$('longitude').value,photo:photoData,notes:$('notes').value.trim(),created:new Date().toISOString()};r.dap=r.planting?Math.max(0,Math.floor((new Date(new Date().toDateString())-new Date(r.planting+'T00:00:00'))/86400000)):null;r.alerts=alertTypes(r);records.unshift(r);if(writeData()){$('formMsg').textContent=r.alerts.length?'Salvo com alerta: '+r.alerts.join(', '):'Monitoramento salvo neste aparelho.';$('monitorForm').reset();$('date').value=today();$('disease').value='Não observado';photoData='';renderDashboard();} });
+function renderDashboard(){ $('mTotal').textContent=records.length;$('mAlerts').textContent=records.filter(r=>alertTypes(r).length).length;let avg=k=>{let a=records.map(r=>r[k]).filter(x=>typeof x==='number');return a.length?(a.reduce((x,y)=>x+y,0)/a.length).toFixed(1):'—'};$('mCater').textContent=avg('caterpillars');$('mBugs').textContent=avg('bugs')}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function renderRecords(){let q=$('searchRecords').value.toLowerCase();let list=records.filter(r=>[r.farm,r.talhao,r.point,r.stage,r.notes].join(' ').toLowerCase().includes(q));$('recordList').innerHTML=list.length?list.map(r=>{let a=alertTypes(r);return `<div class="record"><div class="recordtop"><div><div class="recordtitle">${esc(r.talhao)} · ${esc(r.point)}</div><div class="recordmeta">${esc(r.date)} · ${esc(r.stage||'Estádio não informado')} · ${r.dap==null?'DAP —':r.dap+' DAP'}</div></div><span class="tag ${a.length?'alert':''}">${a.length?'ALERTA':'REGISTRADO'}</span></div><div class="recordmeta">Lagartas: ${r.caterpillars??'—'}/m · Percevejos: ${r.bugs??'—'}/m · Desfolha: ${r.defoliation??'—'}%</div><div class="recordmeta">Doenças: ${esc(r.disease||'—')} · GPS: ${r.latitude&&r.longitude?esc(r.latitude+', '+r.longitude):'não registrado'}</div>${r.notes?`<div class="small" style="margin-top:7px">${esc(r.notes)}</div>`:''}${r.photo?`<img src="${r.photo}" alt="Foto do registro">`:''}<div class="btnrow"><button class="btn ghost" onclick="deleteRecord(${r.id})">Excluir registro</button>${r.latitude&&r.longitude?`<button class="btn secondary" onclick="window.open('https://maps.apple.com/?ll=${r.latitude},${r.longitude}','_blank')">Ver GPS</button>`:''}</div></div>`}).join(''):'<div class="card small">Nenhum registro encontrado. Toque em “Registrar” para adicionar a primeira visita.</div>'}
+function deleteRecord(id){if(confirm('Excluir este registro?')){records=records.filter(r=>r.id!==id);writeData();renderRecords();renderDashboard()}}
+function saveSettings(){settings={limCater:Number($('limCater').value)||0,limBugs:Number($('limBugs').value)||0,limDefV:Number($('limDefV').value)||0,limDefR:Number($('limDefR').value)||0};writeData();renderDashboard();renderRecords();alert('Limites salvos. São referências de triagem, não prescrição agronômica.')}
+function csvCell(v){return '"'+String(v??'').replace(/"/g,'""')+'"'}
+function exportCSV(){if(!records.length){alert('Ainda não há registros para exportar.');return}let cols=['Fazenda','Talhão','Ponto','Data visita','Data plantio','DAP','Estádio','Plantas/m','Lagartas/m','Percevejos/m','Desfolha %','Doenças','Latitude','Longitude','Observações','Alertas'];let rows=records.map(r=>[r.farm,r.talhao,r.point,r.date,r.planting,r.dap,r.stage,r.plants,r.caterpillars,r.bugs,r.defoliation,r.disease,r.latitude,r.longitude,r.notes,alertTypes(r).join('; ')]);let csv='\ufeff'+[cols,...rows].map(row=>row.map(csvCell).join(';')).join('\r\n');downloadFile(csv,'monitoramento_soja.csv','text/csv;charset=utf-8')}
+function exportJSON(){downloadFile(JSON.stringify({records,settings,exportedAt:new Date().toISOString()},null,2),'backup_soja_campo.json','application/json')}
+function importJSON(e){let f=e.target.files[0];if(!f)return;let reader=new FileReader();reader.onload=()=>{try{let d=JSON.parse(reader.result);if(!Array.isArray(d.records))throw Error();if(confirm('Importar '+d.records.length+' registros? Isso substituirá os registros atuais.')){records=d.records;if(d.settings)settings={...settings,...d.settings};writeData();readData();renderDashboard();renderRecords();alert('Backup importado.')}}catch(err){alert('Arquivo de backup inválido.')}e.target.value=''};reader.readAsText(f)}
+function downloadFile(content,name,type){let blob=new Blob([content],{type}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+async function loadWeather(){ $('weatherStatus').textContent='Consultando previsão…';try{let url='https://api.open-meteo.com/v1/forecast?latitude=-18.79&longitude=-52.62&current=temperature_2m,relative_humidity_2m,precipitation,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,precipitation_sum&timezone=America%2FCampo_Grande&forecast_days=3';let res=await fetch(url);if(!res.ok)throw Error();let d=await res.json(),c=d.current,days=d.daily;$('weatherResult').classList.remove('hidden');$('weatherResult').innerHTML=`<div class="weatherbig">${Math.round(c.temperature_2m)}°C</div><div class="small">Umidade ${Math.round(c.relative_humidity_2m)}% · Vento ${Math.round(c.wind_speed_10m)} km/h · Chuva atual ${c.precipitation} mm</div><div class="divider"></div>${days.time.map((day,i)=>`<div style="display:flex;justify-content:space-between;padding:5px 0"><b>${new Date(day+'T12:00:00').toLocaleDateString('pt-BR',{weekday:'short',day:'2-digit',month:'2-digit'})}</b><span>${Math.round(days.temperature_2m_min[i])}–${Math.round(days.temperature_2m_max[i])}°C</span><span>${days.precipitation_probability_max[i]??0}% · ${days.precipitation_sum[i]} mm</span></div>`).join('')}<div class="small" style="margin-top:8px">Fonte: Open-Meteo · previsão regional</div>`;$('weatherStatus').textContent='Atualizado: '+new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}catch(e){$('weatherStatus').textContent='Clima indisponível agora. Verifique a internet e tente novamente.'}}
+function updateOnline(){ $('offlineBadge').textContent=navigator.onLine?'● conectado':'● modo offline';$('offlineBadge').style.background=navigator.onLine?'#ffffff10':'#9a6700'}window.addEventListener('online',updateOnline);window.addEventListener('offline',updateOnline);
+readData();$('date').value=today();renderDashboard();updateOnline();
+if('serviceWorker' in navigator && location.protocol.startsWith('http'))window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+</script>
+</body>
+</html>

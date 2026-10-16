@@ -1,0 +1,30 @@
+SOJA CAMPO — PROTÓTIPO PWA
+============================
+
+Arquivos:
+- index.html: interface e funcionalidades
+- manifest.json: configuração instalável
+- sw.js: cache para abrir offline depois da primeira visita
+- icon.svg: ícone
+
+FUNCIONALIDADES:
+- Registros de monitoramento de soja
+- DAP calculado pela data de plantio
+- GPS do ponto (requer HTTPS e permissão)
+- Fotos comprimidas e armazenadas no navegador
+- Histórico e busca
+- Alertas de triagem configuráveis
+- Exportação CSV para Excel e backup JSON
+- Previsão do tempo regional (requer internet)
+- Cache offline do app (depois de carregado uma vez)
+
+IMPORTANTE:
+1. Para usar como app instalável no iPhone, publique estes arquivos em uma hospedagem HTTPS.
+2. Abra o endereço no Safari do iPhone > Compartilhar > Adicionar à Tela de Início > ative “Abrir como app da web” se aparecer.
+3. Abra o app uma vez conectado para guardar os arquivos offline.
+4. Registros ficam neste navegador/aparelho. Exporte backups regularmente. Limpar dados do Safari pode apagar registros.
+5. O GPS requer HTTPS e autorização.
+6. A previsão usa Open-Meteo para uma coordenada regional aproximada de Chapadão do Sul; não é uma estação dentro do talhão.
+7. Alertas são triagem configurável e não substituem orientação de engenheiro agrônomo ou recomendações oficiais.
+
+Este é um protótipo inicial, não é afiliado à Syngenta e não replica código proprietário do Cropwise.
