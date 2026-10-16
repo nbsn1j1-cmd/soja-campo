@@ -28,3 +28,10 @@ LIMITES IMPORTANTES
 
 TESTES DE ENTREGA
 JavaScript e estrutura do ZIP devem ser verificados antes da publicação. Recomenda-se testar permissões GPS, backup/restauração, mapas e fluxo completo em um iPhone real antes do uso operacional.
+
+ATUALIZAÇÃO v7.1 — MONITORAMENTO CAMINHANDO
+- No menu Mapa, selecione fazenda e talhão e toque em “Iniciar caminhada”.
+- Mantenha a tela do mapa aberta e permita a localização no Safari. O trajeto aparece em azul enquanto o GPS acompanha o deslocamento.
+- Ao encontrar uma ocorrência, toque em “Marcar ocorrência aqui”, informe o tipo e uma observação opcional. O ponto será salvo com GPS e aparecerá no histórico/mapa.
+- Toque em “Finalizar” para guardar o trajeto. Os trajetos ficam no aparelho e entram no backup JSON e na exportação GeoJSON.
+- Requer site HTTPS, permissão de localização e o navegador aberto durante a caminhada. Não garante rastreamento com a tela bloqueada ou com o app suspenso. A precisão depende do GPS do celular e das condições do local.
