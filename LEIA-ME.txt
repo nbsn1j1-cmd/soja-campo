@@ -1,14 +1,26 @@
-SOJA CAMPO — VERSÃO 5: RELATÓRIO AVANÇADO
+SOJA CAMPO — VERSÃO 6: AGRICULTURA DE PRECISÃO
 
-Novidades no relatório por talhão:
-- Identificação da fazenda, talhão, área, período e última vistoria.
-- Painel com número de vistorias, alertas e proporção de vistorias com alerta.
-- Médias dos indicadores numéricos disponíveis.
-- Comparação simples entre a primeira e a segunda metade dos registros para lagartas e percevejos.
-- Frequência das pragas, doenças/sintomas e plantas daninhas por vistoria.
-- Plano de acompanhamento sugerido e seção explicando limites dos dados.
-- Exportação TXT e impressão/salvar como PDF.
+Base: versão 5 (relatórios avançados) + recursos anteriores de GPS, mapa e cadastro de fazendas/talhões.
 
-IMPORTANTE: não é uma IA externa; são cálculos e textos automáticos baseados nos registros. Frequência de ocorrência não equivale a porcentagem de área infestada. Confirme diagnósticos e decisões de manejo com engenheiro agrônomo.
+NOVIDADES DA VERSÃO 6
+- Assistente automático local, sem API paga de IA: ordena talhões para revisita usando alertas configurados, tempo desde a última vistoria e completude dos dados.
+- Painel com registros analisados, talhões com histórico, vistorias com alerta e dados incompletos.
+- Exportação da análise automática em TXT.
+- Acesso mais direto à análise ao abrir a aba Relatório.
+- Identificação visual da versão 6 e atualização do cache offline.
+- Mantém relatórios por talhão, médias, tendências simples, frequência de pragas/doenças/daninhas e impressão/salvar como PDF.
+- Mantém cadastro e medição estimada de talhões por desenho/GPS, monitoramento com foto/GPS, CSV e backup JSON.
 
-Inclui recursos da versão 4 e do mapa satélite/GPS. O site deve estar publicado em HTTPS para permitir localização no Safari. Os dados ficam no armazenamento local do navegador; faça backup regularmente.
+COMO USAR
+1. Descompacte o ZIP.
+2. Publique os arquivos na raiz de um repositório GitHub e conecte-o ao Netlify, ou faça upload da pasta/arquivos no serviço de hospedagem.
+3. Abra o endereço HTTPS no Safari do iPhone. Para instalar, use Compartilhar > Adicionar à Tela de Início.
+4. Cadastre fazendas e talhões, registre vistorias e abra Relatório para ver a análise e gerar relatórios.
+5. Faça backup JSON regularmente em Configurações. Para restaurar, use Importar backup JSON.
+
+LIMITES IMPORTANTES
+- Mapa e imagens de satélite dependem de internet e dos provedores de mapas. GPS exige permissão e HTTPS.
+- A análise v6 é baseada em regras simples, não é IA conversacional, diagnóstico ou prescrição de defensivos.
+- Os dados permanecem no armazenamento local deste navegador/aparelho; não há sincronização automática entre aparelhos.
+- A área do talhão é estimada. Confirme limites e área antes de decisões operacionais.
+- O modo offline pode funcionar parcialmente; os mapas e o clima exigem internet.

@@ -22,7 +22,7 @@ main{max-width:760px;margin:auto;padding:14px}.view{display:none}.view.active{di
 </head>
 <body>
 <header>
-  <div class="headrow"><div><div class="brand">SOJA CAMPO · MONITORAMENTO</div><h1>Minha lavoura</h1><div class="sub">Chapadão do Sul · Mato Grosso do Sul</div></div><div class="chip" id="offlineBadge">● pronto para uso</div></div>
+  <div class="headrow"><div><div class="brand">SOJA CAMPO · AGRICULTURA DE PRECISÃO v6</div><h1>Minha lavoura</h1><div class="sub">Chapadão do Sul · Mato Grosso do Sul</div></div><div class="chip" id="offlineBadge">● pronto para uso</div></div>
 </header>
 <main>
 <section class="view active" id="home">
@@ -103,7 +103,9 @@ main{max-width:760px;margin:auto;padding:14px}.view{display:none}.view.active{di
 </section>
 
 <section class="view" id="report">
-  <div class="sectiontitle">Relatório inteligente por talhão</div>
+  <div class="sectiontitle">Relatórios avançados · v6</div>
+  <div class="card" style="margin-bottom:12px"><b>Assistente agronômico automático</b><div class="small" style="margin:5px 0 10px">Analisa os registros locais, sinaliza tendências e sugere quais talhões revisar. Funciona sem API de IA; resultados dependem da qualidade das anotações.</div><button class="btn" onclick="runFieldAssistant()">✦ Analisar registros</button><div id="assistantOutput" style="margin-top:12px"></div><div class="btnrow"><button class="btn secondary" onclick="exportJSON()">Baixar backup completo</button><button class="btn ghost" onclick="downloadAssistant()">Exportar análise TXT</button></div></div>
+  <div class="sectiontitle">Relatório detalhado por talhão</div>
   <div class="card"><div class="small">Selecione fazenda e talhão para calcular médias dos registros salvos e montar um relatório de apoio.</div>
   <div class="field"><label for="reportFarm">Fazenda</label><select id="reportFarm" onchange="refreshReportFields()"><option value="">Selecione</option></select></div>
   <div class="field"><label for="reportField">Talhão</label><select id="reportField"><option value="">Selecione</option></select></div>
@@ -147,7 +149,7 @@ let records=[], farms=[], fields=[], settings={limCater:3,limBugs:2,limDefV:30,l
 function readData(){try{records=JSON.parse(localStorage.getItem(DB)||'[]')}catch(e){records=[]}try{farms=JSON.parse(localStorage.getItem(FARMS)||'[]')}catch(e){farms=[]}try{fields=JSON.parse(localStorage.getItem(FIELDS)||'[]')}catch(e){fields=[]}try{settings={...settings,...JSON.parse(localStorage.getItem(SETTINGS)||'{}')}}catch(e){};['limCater','limBugs','limDefV','limDefR'].forEach(k=>$(k).value=settings[k]);}
 function writeData(){try{localStorage.setItem(DB,JSON.stringify(records));localStorage.setItem(SETTINGS,JSON.stringify(settings));localStorage.setItem(FARMS,JSON.stringify(farms));localStorage.setItem(FIELDS,JSON.stringify(fields));return true}catch(e){alert('Armazenamento cheio. Exporte o backup e remova fotos antigas.');return false}}
 function today(){return new Date().toLocaleDateString('en-CA')}
-function showView(v){document.querySelectorAll('.view').forEach(x=>x.classList.toggle('active',x.id===v));document.querySelectorAll('.navbtn').forEach(x=>x.classList.toggle('active',x.dataset.view===v));if(v==='records')renderRecords();if(v==='home')renderDashboard();if(v==='mapview'){renderFarmSelects();renderFieldList();setTimeout(initFieldMap,150)}if(v==='new')renderFarmSelects();if(v==='report')refreshReportFarms();window.scrollTo(0,0)}
+function showView(v){document.querySelectorAll('.view').forEach(x=>x.classList.toggle('active',x.id===v));document.querySelectorAll('.navbtn').forEach(x=>x.classList.toggle('active',x.dataset.view===v));if(v==='records')renderRecords();if(v==='home')renderDashboard();if(v==='mapview'){renderFarmSelects();renderFieldList();setTimeout(initFieldMap,150)}if(v==='new')renderFarmSelects();if(v==='report'){refreshReportFarms();runFieldAssistant()}window.scrollTo(0,0)}
 function dapCalc(){let p=$('planting').value;if(!p){$('dap').value='';return}let d=new Date(p+'T12:00:00');$('dap').value=Math.max(0,Math.floor((new Date(new Date().toDateString())-new Date(d.toDateString()))/86400000))}
 $('planting').addEventListener('change',dapCalc);
 $('photo').addEventListener('change',async e=>{photoData='';let f=e.target.files&&e.target.files[0];if(!f)return;try{photoData=await compressImage(f);$('formMsg').textContent='Foto preparada para salvar.'}catch(err){$('formMsg').textContent='Não foi possível preparar a foto.'}});
@@ -265,6 +267,20 @@ function renderFieldList(){
 function selectedValues(id){return Array.from($(id).selectedOptions).map(o=>o.value)}
 function refreshReportFarms(){let el=$('reportFarm');if(!el)return;el.innerHTML='<option value="">Selecione a fazenda</option>'+farms.map(f=>`<option value="${f.id}">${esc(f.name)}</option>`).join('');refreshReportFields()}
 function refreshReportFields(){let farmId=Number($('reportFarm').value);$('reportField').innerHTML='<option value="">Selecione o talhão</option>'+fields.filter(f=>f.farmId===farmId).map(f=>`<option value="${f.id}">${esc(f.name)}</option>`).join('')}
+let lastAssistantText='';
+function runFieldAssistant(){
+ const out=$('assistantOutput'); if(!out)return;
+ if(!records.length){out.innerHTML='<div class="notice">Ainda não há registros para analisar. Cadastre a fazenda e o talhão, depois faça uma vistoria.</div>';lastAssistantText='Sem registros para analisar.';return}
+ const byField=new Map();
+ records.forEach(r=>{const key=String(r.fieldId||('nome:'+r.farm+'/'+r.talhao));if(!byField.has(key))byField.set(key,[]);byField.get(key).push(r)});
+ const now=new Date();let lines=['SOJA CAMPO v6 — ANÁLISE AUTOMÁTICA',`Gerado em: ${now.toLocaleString('pt-BR')}`,`Registros analisados: ${records.length}`,`Talhões com registros: ${byField.size}`,''];let cards=[];
+ for(const [key,arr0] of byField){const arr=arr0.slice().sort((a,b)=>(a.date||'').localeCompare(b.date||''));const last=arr[arr.length-1];const alertN=arr.filter(r=>alertTypes(r).length).length;const missing=arr.filter(r=>!r.stage||r.incidence==null||(!r.latitude||!r.longitude)||(!r.pests?.length&&!r.weeds?.length&&!r.diseases?.length));const days=last.date?Math.floor((now-new Date(last.date+'T12:00:00'))/86400000):null;let score=alertN*3+(days===null?2:days>=10?3:days>=6?2:0)+(missing.length/arr.length);let level=score>=6?'PRIORIDADE':score>=3?'ATENÇÃO':'ROTINA';let label=last.talhao||key;let farm=last.farm||'Fazenda não informada';let reasons=[];if(alertN)reasons.push(`${alertN} vistoria(s) com alerta`);if(days!==null&&days>=6)reasons.push(`última vistoria há ${days} dias`);if(missing.length)reasons.push(`${missing.length} registro(s) com dados importantes ausentes`);if(!reasons.length)reasons.push('sem sinal forte nos dados disponíveis; manter rotina de campo');cards.push({score,level,label,farm,last,arr,alertN,missing,days,reasons});lines.push(`${level} — ${farm} / ${label}`,`Vistorias: ${arr.length}; com alerta: ${alertN}; última visita: ${last.date||'sem data'}`,`Pontos para acompanhar: ${reasons.join('; ')}`,'');}
+ cards.sort((a,b)=>b.score-a.score);
+ const globalMissing=records.filter(r=>!r.stage||r.incidence==null||r.latitude==null||r.longitude==null).length;
+ lines.push(`Qualidade dos dados: ${globalMissing} de ${records.length} registros sem estádio, incidência ou GPS completo.`, 'A análise é uma triagem baseada em regras, não diagnóstico nem recomendação de aplicação.');lastAssistantText=lines.join('\n');
+ out.innerHTML=`<div class="grid">${[['Registros',records.length],['Talhões analisados',byField.size],['Vistorias com alerta',records.filter(r=>alertTypes(r).length).length],['Dados incompletos',globalMissing]].map(([a,b])=>`<div class="card"><div class="metriclabel">${a}</div><div class="metric">${b}</div></div>`).join('')}</div><h3 style="margin-top:16px">Prioridade de revisita</h3>${cards.map(c=>`<div class="record"><div class="recordtop"><div><b>${esc(c.farm)} · ${esc(c.label)}</b><div class="recordmeta">${c.arr.length} vistoria(s) · última: ${esc(c.last.date||'sem data')}</div></div><span class="tag ${c.level!=='ROTINA'?'alert':''}">${c.level}</span></div><div class="small" style="margin-top:8px">${c.reasons.map(esc).join(' · ')}</div></div>`).join('')}<div class="notice">Critério de prioridade: combina alertas configurados, tempo desde a última vistoria e preenchimento dos dados. Não representa risco fitossanitário validado.</div>`;
+}
+function downloadAssistant(){if(!lastAssistantText)runFieldAssistant();downloadFile(lastAssistantText||'Sem dados','analise_soja_campo_v6.txt','text/plain;charset=utf-8')}
 function generateReport(){
  const fieldId=Number($('reportField').value),f=fields.find(x=>x.id===fieldId),farm=farms.find(x=>x.id===f?.farmId);
  if(!f){alert('Selecione fazenda e talhão.');return}
