@@ -1,7 +1,7 @@
 {
-  "name": "Soja Campo v8.1 - Monitoramento Profissional",
+  "name": "Soja Campo v8.3 Pro Campo",
   "short_name": "Soja Campo",
-  "description": "Monitoramento de soja caminhando com GPS, alerta de limite de talhão, histórico de trajetos, relatórios e uso offline parcial.",
+  "description": "Monitoramento de soja com GPS, caminhadas e análises locais.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

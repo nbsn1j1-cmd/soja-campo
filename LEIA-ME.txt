@@ -1,46 +1,43 @@
-SOJA CAMPO v8.1 — MONITORAMENTO INTELIGENTE DE CAMPO
+SOJA CAMPO v8.3 PRO CAMPO
+========================
 
-OBJETIVO
-Aplicativo web independente para monitoramento da soja, com prioridade para vistoria caminhando pelo talhão, funcionamento com e sem internet (offline parcial), análise local e relatórios.
+Versão web/PWA para monitoramento de soja, com foco em vistoria caminhando pelo talhão.
 
-NOVIDADES DA VERSÃO 8.1
-- GPS contínuo durante a caminhada, com filtro para ignorar pontos com precisão muito baixa (>80 m) e reduzir ruído por deslocamento mínimo de 4 m.
-- Salvamento automático do trajeto durante a caminhada e recuperação do último percurso após fechamento inesperado do navegador.
-- Indicadores de pontos registrados, distância aproximada, duração da vistoria, ocorrências e precisão GPS.
-- Exportação do trajeto para GPX e dos pontos para CSV.
-- Mapa esquemático offline para visualizar posição, trajeto e ocorrências quando a biblioteca de mapa ou os mapas-base não estiverem disponíveis.
-- Armazenamento local adicional via IndexedDB agora inclui trajetos, além de registros, talhões, fazendas e configurações.
-- Backup JSON inclui dados de campo e trajetos. Fotos de ocorrências também ficam incluídas nos registros JSON, mas o tamanho pode ser grande.
-- Cache do aplicativo e tentativa de guardar a biblioteca Leaflet depois de carregada online.
-- Relatórios, análise baseada em regras, limites configuráveis, CSV, JSON, GeoJSON e impressão/salvar PDF mantidos.
+RECURSOS
+- Mapa de ruas e satélite quando há internet e os serviços de mapa estão disponíveis.
+- GPS ao vivo e desenho do trajeto durante a caminhada.
+- Filtro para rejeitar saltos de GPS muito improváveis e reduzir trajetos distorcidos.
+- Indicadores atualizados de duração, distância, pontos e precisão.
+- Registro rápido de ocorrências com categoria, intensidade, quantidade, observações e foto comprimida.
+- Feedback visual e vibração curta após registrar ocorrência, quando o aparelho permitir.
+- Alerta de conferência quando o GPS parece estar fora do perímetro cadastrado.
+- Histórico de caminhadas, exportação GPX/CSV/GeoJSON, relatórios e backup JSON.
+- Salvamento local e tentativa de cópia de recuperação com IndexedDB.
+- Modo offline parcial: registros/GPS continuam se o app estiver carregado; mapa-base offline não é garantido.
+- Análises por regras locais, sem API externa de IA paga.
 
 PUBLICAR NO GITHUB + NETLIFY
-1. Descompacte o ZIP.
-2. Abra a pasta soja6.
-3. Envie TODOS os arquivos de dentro da pasta soja6 para a raiz do repositório GitHub, substituindo os arquivos antigos.
-4. Faça commit/push e aguarde o Netlify concluir a publicação.
-5. Abra o site por HTTPS no Safari do iPhone e permita a localização. Para tentar preparar o cache offline da biblioteca de mapa, abra online e recarregue o site uma vez.
-6. Abra Monitorar, escolha fazenda e talhão e toque em Iniciar caminhada.
-7. Mantenha o site aberto durante a vistoria. Marque ocorrências pelos botões e finalize a caminhada para arquivar o trajeto.
+1. Faça backup JSON do aplicativo antigo antes de substituir arquivos.
+2. Descompacte o ZIP.
+3. Abra a pasta soja6 e envie o conteúdo dela para a raiz do repositório GitHub.
+4. Faça commit e aguarde o Netlify publicar. O site precisa usar HTTPS para o GPS.
+5. Abra o site no Safari do iPhone, recarregue e teste GPS e salvamento com uma caminhada curta.
+6. Antes de sair da área com sinal, abra Configurações e use “Preparar aplicativo para uso offline”.
 
-USO SEM INTERNET — LIMITES REAIS
-- Registros, GPS, trajetos e análises locais funcionam sem internet depois que o aplicativo tiver sido carregado, desde que o navegador mantenha os dados locais.
-- Sem internet, o mapa-base de ruas/satélite não pode baixar novas imagens. O aplicativo mostra um mapa esquemático dos trajetos e pontos, sem geografia de fundo. A biblioteca Leaflet só estará disponível offline se tiver sido carregada e guardada em cache anteriormente.
-- Para melhor disponibilidade offline, abra o aplicativo online antes de ir ao campo. Não é um sistema de mapas offline completo e não baixa previamente tiles de uma região.
-- GPS exige HTTPS e permissão do Safari/iPhone. A qualidade depende do aparelho, céu, árvores e condições locais.
-- A vistoria GPS não tem garantia de continuar com a tela bloqueada ou com o navegador em segundo plano. Mantenha a tela ativa e a página aberta.
-- A distância do trajeto é uma estimativa calculada a partir dos pontos GPS aceitos; não é medição topográfica.
-- Dados locais não sincronizam automaticamente entre dispositivos. Exporte o backup JSON e guarde cópia fora do iPhone.
-- Armazenamento pode encher por fotos ou trajetos extensos. Faça backups regulares.
-- A inteligência local é triagem estatística baseada nos dados e limites configurados, não diagnóstico nem prescrição de aplicação. Confirme decisões com o responsável técnico.
-- Teste primeiro um trajeto curto com dados de exemplo antes de uso operacional.
+PRIMEIRO USO
+1. Cadastre uma fazenda.
+2. Cadastre/desenhe o perímetro de pelo menos um talhão (3 pontos ou mais).
+3. Abra Monitorar, selecione fazenda e talhão e inicie uma caminhada.
+4. Aguarde precisão GPS aceitável e registre ocorrências com o botão de marcação rápida.
+5. Finalize a caminhada e exporte um backup regularmente.
 
-O Soja Campo é um projeto independente e não é afiliado à Syngenta ou ao Cropwise.
+LIMITAÇÕES IMPORTANTES
+- Os dados são locais ao navegador/aparelho. Não há sincronização automática entre dispositivos.
+- O modo offline não baixa uma região inteira de mapas de ruas ou satélite. O mapa esquemático offline serve para visualizar coordenadas e trajetos, não substitui cartografia de fundo.
+- O iPhone/Safari pode pausar localização em segundo plano ou com a tela bloqueada. Mantenha a página aberta durante a caminhada; o bloqueio de tela não é garantido.
+- Área de talhão é estimativa matemática do perímetro desenhado; não é levantamento topográfico certificado.
+- Alertas e análises são triagem baseada nos dados inseridos, não diagnóstico nem prescrição de defensivos. Confirme identificação, nível de ação, rótulo/bula, legislação local e orientação de engenheiro agrônomo antes de qualquer aplicação.
+- Clima e mapas externos exigem internet. A previsão meteorológica é regional e pode não refletir as condições do talhão.
 
-MELHORIAS ADICIONAIS v8.1
-- Tentativa de manter a tela ativa com Screen Wake Lock em navegadores compatíveis; não garante GPS em segundo plano nem com tela bloqueada.
-- Aviso visual quando a posição GPS estiver fora do perímetro do talhão cadastrado (quando existe polígono salvo). É um aviso de conferência, não um limite topográfico.
-- Histórico das últimas caminhadas com botão para enquadrar o trajeto no mapa.
-- Duração exibida em horas, minutos e segundos.
-- Salvamento da cópia de recuperação IndexedDB com frequência limitada durante o trajeto para reduzir operações excessivas; a cópia principal da caminhada continua sendo atualizada localmente.
-
+VALIDAÇÃO DESTE PACOTE
+Foi verificada a sintaxe JavaScript, estrutura HTML básica, JSON do manifesto e integridade do ZIP. Isso não substitui um teste completo em iPhone real e em campo.
