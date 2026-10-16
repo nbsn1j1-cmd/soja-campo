@@ -1,17 +1,14 @@
-SOJA CAMPO — VERSÃO 3 COM SATÉLITE E GPS
+SOJA CAMPO — VERSÃO 5: RELATÓRIO AVANÇADO
 
-Novidades:
-- Alternância entre mapa de ruas (OpenStreetMap) e imagem de satélite (Esri World Imagery).
-- Botão para localizar a posição atual do iPhone.
-- Gravação do perímetro por GPS enquanto você caminha ou dirige pelo limite do talhão; os pontos são adicionados a partir de aproximadamente 5 m de deslocamento.
-- Também é possível marcar os cantos tocando no mapa.
-- A área é calculada como estimativa em hectares.
-- Cadastro de fazendas/talhões e histórico de vistorias mantidos.
+Novidades no relatório por talhão:
+- Identificação da fazenda, talhão, área, período e última vistoria.
+- Painel com número de vistorias, alertas e proporção de vistorias com alerta.
+- Médias dos indicadores numéricos disponíveis.
+- Comparação simples entre a primeira e a segunda metade dos registros para lagartas e percevejos.
+- Frequência das pragas, doenças/sintomas e plantas daninhas por vistoria.
+- Plano de acompanhamento sugerido e seção explicando limites dos dados.
+- Exportação TXT e impressão/salvar como PDF.
 
-IMPORTANTE:
-- Para GPS, o site deve estar publicado em HTTPS e o Safari precisa ter permissão de localização.
-- Imagens de satélite e mapa precisam de internet e estão sujeitos à disponibilidade/termos dos provedores.
-- GPS comum do iPhone pode ter erro de vários metros. Não é levantamento topográfico certificado e não promete precisão centimétrica.
-- O desenho automático do perímetro precisa ser revisado: ruído do GPS pode distorcer a área.
-- Dados são guardados localmente no navegador. Faça backup regularmente.
-- Protótipo independente, não afiliado à Syngenta, TELUS ou Sirrus.
+IMPORTANTE: não é uma IA externa; são cálculos e textos automáticos baseados nos registros. Frequência de ocorrência não equivale a porcentagem de área infestada. Confirme diagnósticos e decisões de manejo com engenheiro agrônomo.
+
+Inclui recursos da versão 4 e do mapa satélite/GPS. O site deve estar publicado em HTTPS para permitir localização no Safari. Os dados ficam no armazenamento local do navegador; faça backup regularmente.
