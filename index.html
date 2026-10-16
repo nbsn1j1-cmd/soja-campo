@@ -79,8 +79,8 @@ main{max-width:760px;margin:auto;padding:14px}.view{display:none}.view.active{di
     <div class="small" style="margin:5px 0 10px">Escolha a fazenda, dê um nome ao talhão e toque no mapa em cada canto da área. O app calcula os hectares aproximados.</div>
     <div class="field"><label for="mapFarmSelect">Fazenda</label><select id="mapFarmSelect"><option value="">Escolha uma fazenda</option></select></div>
     <div class="field"><label for="newFieldName">Nome do talhão</label><input id="newFieldName" placeholder="Ex.: Talhão 01"></div>
-    <div class="btnrow"><button class="btn secondary" onclick="locateMap()">⌖ Minha localização</button><button class="btn ghost" onclick="undoMapPoint()">↶ Desfazer ponto</button><button class="btn ghost" onclick="clearMapPoints()">Limpar desenho</button></div>
-    <div id="mapStatus" class="small" style="margin:10px 0">Abra o mapa e toque em pelo menos 3 pontos para formar o limite.</div>
+    <div class="btnrow"><button class="btn secondary" onclick="locateMap()">⌖ Minha localização</button><button class="btn secondary" onclick="startGpsTrace()">▶ Gravar perímetro GPS</button><button class="btn ghost" onclick="stopGpsTrace()">■ Parar GPS</button><button class="btn ghost" onclick="undoMapPoint()">↶ Desfazer ponto</button><button class="btn ghost" onclick="clearMapPoints()">Limpar desenho</button></div>
+    <div id="mapStatus" class="small" style="margin:10px 0">Escolha Mapa de ruas ou Satélite. Toque nos cantos do talhão ou grave o perímetro andando com o GPS; são necessários pelo menos 3 pontos.</div>
     <div id="fieldMap" class="mapbox"></div>
     <div class="btnrow"><button class="btn" onclick="saveField()">Salvar talhão e área</button></div>
     <div class="notice">O mapa usa OpenStreetMap e precisa de internet para carregar. A área é uma estimativa pelo contorno desenhado; confira o limite real antes de usar para planejamento operacional.</div>
@@ -127,7 +127,7 @@ main{max-width:760px;margin:auto;padding:14px}.view{display:none}.view.active{di
 <script>
 const $=id=>document.getElementById(id);
 const DB='sojaCampoRecordsV1', SETTINGS='sojaCampoSettingsV1', FARMS='sojaCampoFarmsV2', FIELDS='sojaCampoFieldsV2';
-let records=[], farms=[], fields=[], settings={limCater:3,limBugs:2,limDefV:30,limDefR:15}, photoData='', fieldMap=null, draftPoints=[], draftLayer=null, savedLayers=[];
+let records=[], farms=[], fields=[], settings={limCater:3,limBugs:2,limDefV:30,limDefR:15}, photoData='', fieldMap=null, draftPoints=[], draftLayer=null, savedLayers=[], gpsWatchId=null, lastGpsPoint=null;
 function readData(){try{records=JSON.parse(localStorage.getItem(DB)||'[]')}catch(e){records=[]}try{farms=JSON.parse(localStorage.getItem(FARMS)||'[]')}catch(e){farms=[]}try{fields=JSON.parse(localStorage.getItem(FIELDS)||'[]')}catch(e){fields=[]}try{settings={...settings,...JSON.parse(localStorage.getItem(SETTINGS)||'{}')}}catch(e){};['limCater','limBugs','limDefV','limDefR'].forEach(k=>$(k).value=settings[k]);}
 function writeData(){try{localStorage.setItem(DB,JSON.stringify(records));localStorage.setItem(SETTINGS,JSON.stringify(settings));localStorage.setItem(FARMS,JSON.stringify(farms));localStorage.setItem(FIELDS,JSON.stringify(fields));return true}catch(e){alert('Armazenamento cheio. Exporte o backup e remova fotos antigas.');return false}}
 function today(){return new Date().toLocaleDateString('en-CA')}
@@ -170,10 +170,13 @@ function addFarm(){
 function initFieldMap(){
  if(fieldMap||!$('fieldMap')||!window.L)return;
  fieldMap=L.map('fieldMap').setView([-18.79,-52.62],12);
- L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(fieldMap);
+ const streets=L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'});
+ const satellite=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,attribution:'Imagery © Esri'});
+ streets.addTo(fieldMap);
+ L.control.layers({'Mapa de ruas':streets,'Satélite':satellite},null,{collapsed:false}).addTo(fieldMap);
  draftLayer=L.layerGroup().addTo(fieldMap);
  savedLayers=L.layerGroup().addTo(fieldMap);
- fieldMap.on('click',e=>{draftPoints.push([e.latlng.lat,e.latlng.lng]);drawDraft();});
+ fieldMap.on('click',e=>{if(!gpsWatchId){draftPoints.push([e.latlng.lat,e.latlng.lng]);drawDraft();}});
  renderSavedPolygons();
 }
 function drawDraft(){
@@ -189,7 +192,7 @@ function areaHectares(points){
  return Math.abs(area*R*R/2)/10000;
 }
 function undoMapPoint(){draftPoints.pop();drawDraft()}
-function clearMapPoints(){draftPoints=[];drawDraft()}
+function clearMapPoints(){stopGpsTrace();draftPoints=[];drawDraft()}
 function locateMap(){
  if(!navigator.geolocation){alert('GPS não disponível neste navegador.');return}
  $('mapStatus').textContent='Buscando sua localização…';
@@ -204,6 +207,35 @@ function saveField(){
  let area=areaHectares(draftPoints),coords=draftPoints.map(p=>[p[0],p[1]]);
  fields.push({id:Date.now(),farmId,name,area,coords,created:new Date().toISOString()});writeData();$('newFieldName').value='';draftPoints=[];drawDraft();renderFarmSelects();renderFieldList();renderSavedPolygons();alert('Talhão salvo com área aproximada de '+area.toFixed(2)+' ha.');
 }
+
+function startGpsTrace(){
+ if(!fieldMap){initFieldMap()}
+ if(!navigator.geolocation){alert('GPS não está disponível neste navegador.');return}
+ if(gpsWatchId!==null){alert('A gravação do perímetro GPS já está ativa.');return}
+ $('mapStatus').textContent='Solicitando GPS… permita o acesso à localização quando o Safari perguntar.';
+ gpsWatchId=navigator.geolocation.watchPosition(pos=>{
+   const p=[pos.coords.latitude,pos.coords.longitude];
+   if(!lastGpsPoint || distanceMeters(lastGpsPoint,p)>=5){
+     draftPoints.push(p);lastGpsPoint=p;drawDraft();fieldMap.setView(p,Math.max(fieldMap.getZoom(),16));
+   }
+   $('mapStatus').textContent='GPS gravando perímetro · precisão informada pelo aparelho: ±'+Math.round(pos.coords.accuracy)+' m · pontos: '+draftPoints.length;
+ },err=>{
+   stopGpsTrace();
+   $('mapStatus').textContent='Não foi possível usar o GPS. Confira a permissão de localização do Safari e tente novamente.';
+   alert('O GPS não iniciou. Autorize a localização para este site nas configurações do Safari/iPhone.');
+ },{enableHighAccuracy:true,maximumAge:1000,timeout:20000});
+}
+function stopGpsTrace(){
+ if(gpsWatchId!==null){navigator.geolocation.clearWatch(gpsWatchId);gpsWatchId=null;}
+ lastGpsPoint=null;
+ if($('mapStatus'))$('mapStatus').textContent=draftPoints.length>=3?'Gravação parada · área aproximada: '+areaHectares(draftPoints).toFixed(2)+' ha. Confira o contorno antes de salvar.':'Gravação GPS parada. Pontos capturados: '+draftPoints.length+'. São necessários pelo menos 3 pontos.';
+}
+function distanceMeters(a,b){
+ const rad=Math.PI/180,lat1=a[0]*rad,lat2=b[0]*rad,dlat=(b[0]-a[0])*rad,dlon=(b[1]-a[1])*rad;
+ const h=Math.sin(dlat/2)**2+Math.cos(lat1)*Math.cos(lat2)*Math.sin(dlon/2)**2;
+ return 6371000*2*Math.atan2(Math.sqrt(h),Math.sqrt(1-h));
+}
+
 function renderSavedPolygons(){
  if(!fieldMap||!savedLayers)return;savedLayers.clearLayers();
  fields.forEach(f=>{if(f.coords&&f.coords.length>=3){let farm=farms.find(x=>x.id===f.farmId);L.polygon(f.coords,{color:'#287a49',fillOpacity:.12}).bindPopup('<b>'+esc(f.name)+'</b><br>'+esc(farm?.name||'')+'<br>'+Number(f.area||0).toFixed(2)+' ha').addTo(savedLayers)}});
