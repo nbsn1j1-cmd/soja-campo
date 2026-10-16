@@ -1,4 +1,4 @@
-const CACHE='soja-campo-v8-3';
+const CACHE='soja-campo-v8-4';
 const APP_ASSETS=['./','./index.html','./manifest.json','./icon.svg'];
 const LEAFLET_ASSETS=['https://unpkg.com/leaflet@1.9.4/dist/leaflet.js','https://unpkg.com/leaflet@1.9.4/dist/leaflet.css'];
 self.addEventListener('install',event=>event.waitUntil((async()=>{const cache=await caches.open(CACHE);for(const asset of APP_ASSETS){try{await cache.add(asset)}catch(e){}}await self.skipWaiting()})()));

@@ -41,3 +41,12 @@ LIMITAÇÕES IMPORTANTES
 
 VALIDAÇÃO DESTE PACOTE
 Foi verificada a sintaxe JavaScript, estrutura HTML básica, JSON do manifesto e integridade do ZIP. Isso não substitui um teste completo em iPhone real e em campo.
+
+
+NOVIDADES v8.4 — MAPA DA FAZENDA
+- Visão geral da fazenda com seleção por propriedade e resumo de talhões, área cadastrada e talhões com alertas.
+- Perímetros desenhados exibidos com rótulo do talhão e hectares.
+- Cores por estado de triagem: verde (sem alertas identificados), amarelo (um alerta registrado), vermelho (dois ou mais alertas registrados) e cinza (sem vistoria registrada). Essas cores não são um diagnóstico agronômico.
+- Ao tocar em um talhão, o mapa mostra área, vistorias, alertas e botão para selecionar esse talhão no monitoramento caminhando.
+- Mapa esquemático offline passa a desenhar também os perímetros cadastrados, trajetos e ocorrências quando a biblioteca do mapa não está disponível.
+- A área e a localização dependem dos perímetros e coordenadas cadastrados pelo usuário; não é uma imagem automática da fazenda nem importa os mapas privados do Cropwise.

@@ -1,7 +1,7 @@
 {
-  "name": "Soja Campo v8.3 Pro Campo",
+  "name": "Soja Campo v8.4 Mapa da Fazenda",
   "short_name": "Soja Campo",
-  "description": "Monitoramento de soja com GPS, caminhadas e análises locais.",
+  "description": "Mapa da fazenda com limites de talhões, hectares, alertas georreferenciados e monitoramento GPS.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
